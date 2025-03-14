@@ -1,0 +1,4 @@
+package com.example.webflux_ms_bootcamps.domain.api;
+
+public interface IBootcampServicePort {
+}

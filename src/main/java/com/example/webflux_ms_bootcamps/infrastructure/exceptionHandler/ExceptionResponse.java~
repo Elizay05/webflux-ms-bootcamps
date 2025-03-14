@@ -1,0 +1,4 @@
+package com.example.webflux_ms_bootcamps.infrastructure.exceptionHandler;
+
+public class ExceptionResponse {
+}

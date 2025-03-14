@@ -1,0 +1,4 @@
+package com.example.webflux_ms_bootcamps.application.utils.constants;
+
+public class ConstantsApplication {
+}
