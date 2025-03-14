@@ -1,6 +1,7 @@
 package com.example.webflux_ms_bootcamps.infrastructure.input.handler;
 
 import com.example.webflux_ms_bootcamps.application.dto.request.BootcampRequest;
+import com.example.webflux_ms_bootcamps.application.dto.response.BootcampPageResponse;
 import com.example.webflux_ms_bootcamps.application.handler.IBootcampRestHandler;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Path;
@@ -9,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -23,6 +25,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
@@ -95,5 +98,27 @@ public class BootcampHandlerTest {
                 .verifyComplete();
 
         verify(bootcampRestHandler, never()).createBootcamp(any(BootcampRequest.class));
+    }
+
+    @Test
+    public void test_get_bootcamps_returns_ok_response() {
+        // Arrange
+        ServerRequest request = MockServerRequest.builder().build();
+        BootcampPageResponse mockResponse = new BootcampPageResponse();
+
+        Mockito.when(bootcampRestHandler.getBootcamps(request))
+                .thenReturn(Mono.just(mockResponse));
+
+        // Act
+        Mono<ServerResponse> result = bootcampHandler.getBootcamps(request);
+
+        // Assert
+        StepVerifier.create(result)
+                .expectNextMatches(response -> {
+                    assertEquals(HttpStatus.OK, response.statusCode());
+                    assertEquals(MediaType.APPLICATION_JSON, response.headers().getContentType());
+                    return true;
+                })
+                .verifyComplete();
     }
 }

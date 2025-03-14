@@ -96,4 +96,5 @@ public class ControllerAdvisorTest {
         assertEquals(HttpStatus.NOT_FOUND.toString(), response.getStatus());
         assertNotNull(response.getTimestamp());
     }
+
 }

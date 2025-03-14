@@ -31,27 +31,27 @@ public class BootcampRouter {
             @RouterOperation(
                     path = PATH_BOOTCAMPS,
                     beanClass = BootcampHandler.class,
-                    beanMethod = METHOD_CREATE,
+                    beanMethod = "createBootcamp",
                     method = RequestMethod.POST,
                     operation = @Operation(
-                            operationId = OP_CREATE_BOOTCAMP,
-                            summary = SUMMARY_CREATE_BOOTCAMP,
-                            description = DESC_CREATE_BOOTCAMP,
+                            operationId = "createBootcamp",
+                            summary = "Crear un bootcamp",
+                            description = "Registra un nuevo bootcamp en el sistema con nombre, descripción y hasta 4 capacidades",
                             requestBody = @RequestBody(
                                     content = @Content(
                                             mediaType = MediaType.APPLICATION_JSON_VALUE,
                                             schema = @Schema(implementation = BootcampRequest.class),
                                             examples = @ExampleObject(
-                                                    name = EXAMPLE_NAME_CREATE,
+                                                    name = "Ejemplo de creación de bootcamp",
                                                     value = EXAMPLE_BOOTCAMP_CREATE
                                             )
                                     )
                             ),
                             responses = {
-                                    @ApiResponse(responseCode = CODE_201,
+                                    @ApiResponse(responseCode = "201",
                                             description = RESP_BOOTCAMP_CREATED
                                     ),
-                                    @ApiResponse(responseCode = CODE_400,
+                                    @ApiResponse(responseCode = "400",
                                             description = RESP_ERROR_VALIDATION,
                                             content = @Content(
                                                     mediaType = MediaType.APPLICATION_JSON_VALUE,
@@ -60,7 +60,7 @@ public class BootcampRouter {
                                                     )
                                             )
                                     ),
-                                    @ApiResponse(responseCode = CODE_409,
+                                    @ApiResponse(responseCode = "409",
                                             description = RESP_ERROR_EXISTS,
                                             content = @Content(
                                                     mediaType = MediaType.APPLICATION_JSON_VALUE,
@@ -69,7 +69,7 @@ public class BootcampRouter {
                                                     )
                                             )
                                     ),
-                                    @ApiResponse(responseCode = CODE_500,
+                                    @ApiResponse(responseCode = "500",
                                             description = RESP_ERROR_SERVER
                                     )
                             }
@@ -78,26 +78,26 @@ public class BootcampRouter {
             @RouterOperation(
                     path = PATH_BOOTCAMPS,
                     beanClass = BootcampHandler.class,
-                    beanMethod = METHOD_GET,
+                    beanMethod = "getBootcamps",
                     method = RequestMethod.GET,
                     operation = @Operation(
-                            operationId = OP_GET_BOOTCAMPS,
-                            summary = SUMMARY_GET_BOOTCAMPS,
-                            description = DESC_GET_BOOTCAMPS,
+                            operationId = "getBootcamps",
+                            summary = "Obtener bootcamps",
+                            description = "Lista todos los bootcamps disponibles con paginación y ordenamiento",
                             parameters = {
-                                    @Parameter(name = PARAM_PAGE, description = DESC_PAGE, example = EXAMPLE_PAGE, in = ParameterIn.QUERY),
-                                    @Parameter(name = PARAM_SIZE, description = DESC_SIZE, example = EXAMPLE_SIZE, in = ParameterIn.QUERY),
-                                    @Parameter(name = PARAM_ASC, description = DESC_ASC, example = EXAMPLE_ASC, in = ParameterIn.QUERY),
-                                    @Parameter(name = PARAM_SORT_BY, description = DESC_SORT_BY, example = EXAMPLE_SORT_BY, in = ParameterIn.QUERY)
+                                    @Parameter(name = PARAM_PAGE, description = DESC_PAGE, example = "0", in = ParameterIn.QUERY),
+                                    @Parameter(name = PARAM_SIZE, description = DESC_SIZE, example = "10", in = ParameterIn.QUERY),
+                                    @Parameter(name = PARAM_ASC, description = DESC_ASC, example = "true", in = ParameterIn.QUERY),
+                                    @Parameter(name = PARAM_SORT_BY, description = DESC_SORT_BY, example = "name", in = ParameterIn.QUERY)
                             },
                             responses = {
-                                    @ApiResponse(responseCode = CODE_200,
+                                    @ApiResponse(responseCode = "200",
                                             description = RESP_BOOTCAMP_LIST,
                                             content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                                                     schema = @Schema(implementation = BootcampPageResponse.class)
                                             )
                                     ),
-                                    @ApiResponse(responseCode = CODE_400,
+                                    @ApiResponse(responseCode = "400",
                                             description = RESP_BAD_REQUEST,
                                             content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE)
                                     )
