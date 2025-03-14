@@ -20,6 +20,6 @@ public class BootcampRequest {
     @NotBlank(message = IS_REQUIRED)
     private String description;
 
-    @Size(min = MIN_SIZE_CAPABILITIES, max = MAX_SIZE_CAPABILITIES, message = SIZE_CAPABILITIES)
+    @Size(min = 1, max = 4, message = SIZE_CAPABILITIES)
     private List<Long> capabilities;
 }
