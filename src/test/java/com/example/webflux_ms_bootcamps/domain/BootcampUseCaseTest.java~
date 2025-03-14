@@ -28,7 +28,6 @@ import java.util.List;
 import static com.example.webflux_ms_bootcamps.domain.utils.constants.ConstantsDomain.*;
 import static java.util.List.of;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -239,34 +238,5 @@ public class BootcampUseCaseTest {
 
         Mockito.verify(bootcampPersistencePort).getAllBootcamps(page, size, asc, sortBy);
         Mockito.verify(capabilityPersistencePort).getCapabilitiesByIds(List.of(1L, 2L));
-    }
-
-    @Test
-    public void test_get_bootcamps_with_empty_list() {
-        int page = 0;
-        int size = 10;
-        boolean asc = true;
-        String sortBy = "name";
-
-        List<BootcampModel> emptyBootcamps = List.of();
-        BootcampPageModel emptyPageModel = new BootcampPageModel(emptyBootcamps, 0, 0);
-
-        Mockito.when(bootcampPersistencePort.getAllBootcamps(page, size, asc, sortBy))
-                .thenReturn(Mono.just(emptyPageModel));
-
-        // Act
-        Mono<BootcampPageModel> result = bootcampUseCase.getBootcamps(page, size, asc, sortBy);
-
-        // Assert
-        StepVerifier.create(result)
-                .assertNext(resultPage -> {
-                    assertTrue(resultPage.getBootcamps().isEmpty());
-                    assertEquals(0, resultPage.getTotalPages());
-                    assertEquals(0, resultPage.getTotalElements());
-                })
-                .verifyComplete();
-
-        Mockito.verify(bootcampPersistencePort).getAllBootcamps(page, size, asc, sortBy);
-        Mockito.verify(capabilityPersistencePort, Mockito.never()).getCapabilitiesByIds(Mockito.anyList());
     }
 }

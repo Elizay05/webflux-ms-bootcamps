@@ -6,14 +6,12 @@ import com.example.webflux_ms_bootcamps.domain.exceptions.DuplicateCapabilitiesE
 import com.example.webflux_ms_bootcamps.domain.exceptions.MaxCapabilitiesBootcampException;
 import com.example.webflux_ms_bootcamps.domain.exceptions.MinCapabilitiesBootcampException;
 import com.example.webflux_ms_bootcamps.domain.model.BootcampModel;
-import com.example.webflux_ms_bootcamps.domain.model.BootcampPageModel;
 import com.example.webflux_ms_bootcamps.domain.model.CapabilityModel;
 import com.example.webflux_ms_bootcamps.domain.spi.IBootcampPersistencePort;
 import com.example.webflux_ms_bootcamps.domain.spi.ICapabilityPersistencePort;
 import reactor.core.publisher.Mono;
 
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 import static com.example.webflux_ms_bootcamps.domain.utils.constants.ConstantsDomain.*;
@@ -75,33 +73,5 @@ public class BootcampUseCase implements IBootcampServicePort {
 
     private Mono<Boolean> existBootcamp(String bootcampName) {
         return bootcampPersistencePort.existBootcampByName(bootcampName);
-    }
-
-    @Override
-    public Mono<BootcampPageModel> getBootcamps(int page, int size, boolean asc, String sortBy) {
-        return bootcampPersistencePort.getAllBootcamps(page, size, asc, sortBy)
-                .flatMap(bootcampPageModel -> {
-                    List<Long> capabilityIds = bootcampPageModel.getBootcamps().stream()
-                            .flatMap(boot -> boot.getCapabilities().stream().map(CapabilityModel::getId))
-                            .distinct()
-                            .toList();
-
-                    if (capabilityIds.isEmpty()) {
-                        return Mono.just(bootcampPageModel);
-                    }
-                    return capabilityPersistencePort.getCapabilitiesByIds(capabilityIds)
-                            .map(capabilityList -> {
-                                Map<Long, CapabilityModel> capabilityMap = capabilityList.stream()
-                                        .collect(Collectors.toMap(CapabilityModel::getId, tech -> tech));
-
-                                bootcampPageModel.getBootcamps().forEach(bootcamp ->
-                                        bootcamp.setCapabilities(bootcamp.getCapabilities().stream()
-                                                .map(cap -> capabilityMap.getOrDefault(cap.getId(), cap))
-                                                .toList())
-                                );
-
-                                return bootcampPageModel;
-                            });
-                });
     }
 }

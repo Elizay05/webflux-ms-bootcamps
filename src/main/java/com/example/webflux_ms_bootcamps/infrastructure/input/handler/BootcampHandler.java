@@ -43,4 +43,11 @@ public class BootcampHandler {
                             .then(ServerResponse.status(HttpStatus.CREATED).build());
                 });
     }
+
+    public Mono<ServerResponse> getBootcamps(ServerRequest request) {
+        return bootcampRestHandler.getBootcamps(request)
+                .flatMap(bootcampPage -> ServerResponse.ok()
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .bodyValue(bootcampPage));
+    }
 }
